@@ -1,89 +1,114 @@
 #include "sort.h"
+#include <stdio.h>
 
-/**
- * swap - swaps two integers in an array
- * @a: pointer to first integer
- * @b: pointer to second integer
- */
+/* Helper function to swap two integers */
 void swap(int *a, int *b)
 {
-	int tmp;
-
-	if (a == b)
-		return;
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
+    int temp = *a;
+    *a = *b;
+    *b = temp;
 }
 
-/**
- * lomuto_partition - partitions an array using Lomuto scheme
- * @array: array to partition
- * @low: start index
- * @high: end index (pivot)
- * @size: size of the whole array (for printing)
- *
- * Return: pivot index
- */
-size_t lomuto_partition(int *array, size_t low, size_t high, size_t size)
+/* Lomuto partition scheme */
+int lomuto_partition(int *array, int low, int high, size_t size)
 {
-	size_t i, j;
+    int pivot = array[high];
+    int i = low - 1;
+    int j;
 
-	i = low;
-	for (j = low; j < high; j++)
-	{
-		if (array[j] < array[high])
-		{
-			if (i != j)
-			{
-				swap(&array[i], &array[j]);
-				print_array(array, size);
-			}
-			i++;
-		}
-	}
-
-	if (i != high)
-	{
-		swap(&array[i], &array[high]);
-		print_array(array, size);
-	}
-
-	return (i);
+    for (j = low; j < high; j++)
+    {
+        if (array[j] < pivot)
+        {
+            i++;
+            if (i != j)
+            {
+                swap(&array[i], &array[j]);
+                print_array(array, size);
+            }
+        }
+    }
+    if (i + 1 != high)
+    {
+        swap(&array[i + 1], &array[high]);
+        print_array(array, size);
+    }
+    return (i + 1);
 }
 
-/**
- * quick_sort_recursive - recursively sorts array using Lomuto
- * @array: array to sort
- * @low: start index
- * @high: end index
- * @size: size of the whole array (for printing)
- */
-void quick_sort_recursive(int *array, size_t low, size_t high, size_t size)
+/* Recursive Quick Sort function */
+void quick_sort_recursive(int *array, int low, int high, size_t size)
 {
-	size_t pivot;
-
-	if (low < high)
-	{
-		pivot = lomuto_partition(array, low, high, size);
-
-		if (pivot > 0)
-			quick_sort_recursive(array, low, pivot - 1, size);
-
-		quick_sort_recursive(array, pivot + 1, high, size);
-	}
+    if (low < high)
+    {
+        int pi = lomuto_partition(array, low, high, size);
+        quick_sort_recursive(array, low, pi - 1, size);
+        quick_sort_recursive(array, pi + 1, high, size);
+    }
 }
 
-/**
- * quick_sort - sorts an array of integers in ascending order
- * using the Quick sort algorithm (Lomuto scheme)
- * @array: array to sort
- * @size: size of the array
- */
+/* Main Quick Sort function */
 void quick_sort(int *array, size_t size)
 {
-	if (array == NULL || size < 2)
-		return;
+    if (!array || size < 2)
+        return;
 
-	quick_sort_recursive(array, 0, size - 1, size);
+    quick_sort_recursive(array, 0, size - 1, size);
+}
+#include "sort.h"
+#include <stdio.h>
+
+/* Helper function to swap two integers */
+void swap(int *a, int *b)
+{
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+/* Lomuto partition scheme */
+int lomuto_partition(int *array, int low, int high, size_t size)
+{
+    int pivot = array[high];
+    int i = low - 1;
+    int j;
+
+    for (j = low; j < high; j++)
+    {
+        if (array[j] < pivot)
+        {
+            i++;
+            if (i != j)
+            {
+                swap(&array[i], &array[j]);
+                print_array(array, size);
+            }
+        }
+    }
+    if (i + 1 != high)
+    {
+        swap(&array[i + 1], &array[high]);
+        print_array(array, size);
+    }
+    return (i + 1);
+}
+
+/* Recursive Quick Sort function */
+void quick_sort_recursive(int *array, int low, int high, size_t size)
+{
+    if (low < high)
+    {
+        int pi = lomuto_partition(array, low, high, size);
+        quick_sort_recursive(array, low, pi - 1, size);
+        quick_sort_recursive(array, pi + 1, high, size);
+    }
+}
+
+/* Main Quick Sort function */
+void quick_sort(int *array, size_t size)
+{
+    if (!array || size < 2)
+        return;
+
+    quick_sort_recursive(array, 0, size - 1, size);
 }
