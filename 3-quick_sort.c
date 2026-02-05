@@ -7,13 +7,13 @@
  */
 void swap(int *a, int *b)
 {
-	int tmp;
+    int tmp;
 
-	if (a == b)
-		return;
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
+    if (a == b)
+        return;
+    tmp = *a;
+    *a = *b;
+    *b = tmp;
 }
 
 /**
@@ -27,29 +27,30 @@ void swap(int *a, int *b)
  */
 size_t lomuto_partition(int *array, size_t low, size_t high, size_t size)
 {
-	size_t i, j;
+    size_t i = low - 1;
+    size_t j;
 
-	i = low;
-	for (j = low; j < high; j++)
-	{
-		if (array[j] < array[high])
-		{
-			if (i != j)
-			{
-				swap(&array[i], &array[j]);
-				print_array(array, size);
-			}
-			i++;
-		}
-	}
+    for (j = low; j < high; j++)
+    {
+        if (array[j] < array[high])
+        {
+            i++;
+            if (i != j)
+            {
+                swap(&array[i], &array[j]);
+                print_array(array, size);
+            }
+        }
+    }
 
-	if (i != high)
-	{
-		swap(&array[i], &array[high]);
-		print_array(array, size);
-	}
+    i++;
+    if (i != high)
+    {
+        swap(&array[i], &array[high]);
+        print_array(array, size);
+    }
 
-	return (i);
+    return i;
 }
 
 /**
@@ -61,17 +62,17 @@ size_t lomuto_partition(int *array, size_t low, size_t high, size_t size)
  */
 void quick_sort_recursive(int *array, size_t low, size_t high, size_t size)
 {
-	size_t pivot;
+    size_t pivot;
 
-	if (low < high)
-	{
-		pivot = lomuto_partition(array, low, high, size);
+    if (low < high)
+    {
+        pivot = lomuto_partition(array, low, high, size);
 
-		if (pivot > 0)
-			quick_sort_recursive(array, low, pivot - 1, size);
+        if (pivot > low)
+            quick_sort_recursive(array, low, pivot - 1, size);
 
-		quick_sort_recursive(array, pivot + 1, high, size);
-	}
+        quick_sort_recursive(array, pivot + 1, high, size);
+    }
 }
 
 /**
@@ -82,8 +83,8 @@ void quick_sort_recursive(int *array, size_t low, size_t high, size_t size)
  */
 void quick_sort(int *array, size_t size)
 {
-	if (array == NULL || size < 2)
-		return;
+    if (!array || size < 2)
+        return;
 
-	quick_sort_recursive(array, 0, size - 1, size);
+    quick_sort_recursive(array, 0, size - 1, size);
 }
